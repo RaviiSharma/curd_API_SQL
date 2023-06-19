@@ -1,0 +1,33 @@
+{
+  "name": "curd_api_sql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon leave_mail.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaviiSharma/curd_API_SQL.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RaviiSharma/curd_API_SQL/issues"
+  },
+  "homepage": "https://github.com/RaviiSharma/curd_API_SQL#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "^2.4.2",
+    "mailgen": "^2.0.27",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.3.5",
+    "nodemailer": "^6.9.3",
+    "nodemon": "^2.0.22"
+  }
+}
