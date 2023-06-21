@@ -1,3 +1,5 @@
+
+//________________/ api for leave mails to employees /__________________
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const knex = require("knex");
@@ -48,9 +50,11 @@ try{
   console.log("userEmail", userEmail[0]);
   //console.log("userEmail[0]->",userEmail[0])
  
-  const correctEmail = await db.select("employee_id").from("ptr_employees").where("employee_email", userEmail[0]);
+  const correctEmail = await db.select("employee_id","employee_name").from("ptr_employees").where("employee_email", userEmail[0]);
   if(correctEmail.length==0){return res.status(400).send({message:"no employee found"});}
   console.log("employee_id--", correctEmail[0].employee_id);
+  console.log("employee_name--",correctEmail[0].employee_name)
+  var emplName=correctEmail[0].employee_name;
 
   const correctId = await db.select("leave_status").from("ptr_employee_leave").where("employee_id", correctEmail[0].employee_id);
   console.log("correctId",correctId)
@@ -62,6 +66,7 @@ try{
         console.log("leave_status--", correctId[0].leave_status);
         var response = {
           body: {
+            name : `${emplName}`,
             intro: "Your leave is disaaproved",
             outro: "Looking forward to get response",
           },
@@ -71,6 +76,7 @@ try{
         console.log("leave_status--", correctId[0].leave_status);
         var response = {
           body: {
+            name : `${emplName}`,
             intro: "Your leave is approved",
             outro: "Looking forward to get response",
           },

@@ -6,7 +6,6 @@ app.use(express.json());
 app.use(upload());
 app.use(express.static("uploads"));
 
-
 const jwt = require("jsonwebtoken");
 //__________________________ validations _______________________________________ */
 
@@ -119,7 +118,7 @@ app.get("/getLeaveData", async (req, res) => {
     return res.status(500).send({error: error.message});
   }
 });
-//____________________________ to upload data for takin leave __________________ */
+//____________________________ to upload data for taking leave __________________ */
 
 app.post("/getLeave",authentication, async (req, res) => {
   try {
@@ -183,7 +182,7 @@ app.post("/getLeave",authentication, async (req, res) => {
   }
 });
 
-//__________filter data of employees by passing 2 dates _________
+//____________________/ filter data of employees by passing 2 dates /___________________
 
 app.get("/filtertLeaveData", async (req, res) => {
   try {
