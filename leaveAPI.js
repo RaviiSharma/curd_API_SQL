@@ -18,8 +18,10 @@ const isValidInputValue = function (value) {
 };
 //check valid name
 const isValidOnlyCharacters = function (value) {
-  return /^[A-Za-z]+$/.test(value);
+  return /^[A-Za-z\s]+$/.test(value); // with space 
 };
+//^[a-zA-Z\s]+$
+
 
 const isValidNumber = function (value) {
   if (typeof (value) === "undefined" || value === null) return false;
@@ -80,8 +82,8 @@ app.post("/loginUser", async function (req, res) {
      if (!employee_name ||!isValidInputValue(employee_name) ||!isValidOnlyCharacters(employee_name))
     {return res.status(400).send({status: false,message:"employee_name is required and should contain only alphabets",});};
       
-    if (!employee_no ||!isValidInputValue(employee_no) ||!isValidOnlyCharacters(employee_no))
-    {return res.status(400).send({status: false,message:"employee_id is required but not contain only numbers",});};
+    if (!employee_no ||!isValidInputValue(employee_no) ||!(employee_no).match(/^[a-zA-Z0-9]+$/))
+    {return res.status(400).send({status: false,message:"employee_id is required but only matches a string containing only alphabets and numbers",});};
 
 
     //matching employee_id from db
@@ -107,17 +109,7 @@ app.post("/loginUser", async function (req, res) {
   }
 });
 
-//__________________________ to get all employee_id data ____________________________
 
-app.get("/getLeaveData", async (req, res) => {
-  try {
-    //select all data from table ptr_organization
-    const result = await db.select("employee_id").from("ptr_employees");
-   return res.send(result);
-  } catch (error) {
-    return res.status(500).send({error: error.message});
-  }
-});
 //____________________________ to upload data for taking leave __________________ */
 
 app.post("/getLeave",authentication, async (req, res) => {
@@ -164,7 +156,7 @@ app.post("/getLeave",authentication, async (req, res) => {
       .insert({
         leave_status:data["leave_status"],
         employee_id:id[0].employee_id,
-        reporting_person:empID,
+        reporting_person:empID,//taken employee_id from token hr || admin
        
        
       })  
@@ -179,6 +171,25 @@ app.post("/getLeave",authentication, async (req, res) => {
    
   } catch (error) {
     return res.status(500).send({ error: error.message });
+  }
+});
+
+
+//________________________/ get all data of reporting person by right join /___________________
+
+app.get("/reportingPersonData", async (req, res) => {
+  try {
+    const reporting_Details = await db.raw(`
+      SELECT ptr_employees.employee_id,employee_no,employee_name,employee_dob,employee_email,employee_mobile,employee_gender,employee_home_address, ptr_employee_leave.reporting_person
+      FROM ptr_employees
+      RIGHT JOIN ptr_employee_leave
+      ON ptr_employees.employee_id = ptr_employee_leave.reporting_person
+    `);
+    console.log("reporting_Details", reporting_Details[0]);
+    return res.send(reporting_Details[0]);
+
+  } catch (error) {
+    return res.status(500).send({error: error.message});
   }
 });
 
