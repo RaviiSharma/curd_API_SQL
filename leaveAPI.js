@@ -158,7 +158,7 @@ app.post("/getLeave",authentication, async (req, res) => {
         employee_id:id[0].employee_id,
         reporting_person:empID,//taken employee_id from token hr || admin
        
-       
+      
       })  
       .then((resp) => {
          return res.status(201).json({
